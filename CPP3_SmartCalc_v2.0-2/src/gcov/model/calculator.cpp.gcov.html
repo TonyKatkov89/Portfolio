@@ -1,0 +1,382 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - model/calculator.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">model</a> - calculator.cpp<span style="font-size: 80%;"> (source / <a href="calculator.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">212</td>
+            <td class="headerCovTableEntry">222</td>
+            <td class="headerCovTableEntryHi">95.5 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2023-11-16 14:20:13</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">20</td>
+            <td class="headerCovTableEntryHi">95.0 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;calculator.h&quot;</a>
+<a name="2"><span class="lineNum">       2 </span>            : </a>
+<a name="3"><span class="lineNum">       3 </span>            : static size_t MAX_SIZE = 256;</a>
+<a name="4"><span class="lineNum">       4 </span>            : </a>
+<a name="5"><span class="lineNum">       5 </span>            : namespace s21 {</a>
+<a name="6"><span class="lineNum">       6 </span>            : </a>
+<a name="7"><span class="lineNum">       7 </span><span class="lineCov">         20 : Calculator::Calculator(const std::string&amp; input)</span></a>
+<a name="8"><span class="lineNum">       8 </span><span class="lineCov">         20 :     : expression_(Parcing(input)) {}</span></a>
+<a name="9"><span class="lineNum">       9 </span>            : </a>
+<a name="10"><span class="lineNum">      10 </span><span class="lineCov">         20 : Calculator::~Calculator(){};</span></a>
+<a name="11"><span class="lineNum">      11 </span>            : </a>
+<a name="12"><span class="lineNum">      12 </span><span class="lineNoCov">          0 : const std::stack&lt;Lexem&gt;&amp; Calculator::GetExpression() const {</span></a>
+<a name="13"><span class="lineNum">      13 </span><span class="lineNoCov">          0 :   return expression_;</span></a>
+<a name="14"><span class="lineNum">      14 </span>            : }</a>
+<a name="15"><span class="lineNum">      15 </span>            : </a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">         20 : double Calculator::Result(double x) {</span></a>
+<a name="17"><span class="lineNum">      17 </span>            :   double result;</a>
+<a name="18"><span class="lineNum">      18 </span>            :   try {</a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">         28 :     result = Calculate(ReplaceX(expression_, x));</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          8 :   } catch (const std::underflow_error&amp; uf_error) {</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          1 :     std::cerr &lt;&lt; uf_error.what() &lt;&lt; std::endl;</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">          1 :     result = std::numeric_limits&lt;double&gt;::quiet_NaN();</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">          8 :   } catch (const std::logic_error&amp; log_error) {</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">          7 :     std::cerr &lt;&lt; log_error.what() &lt;&lt; std::endl;</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">          7 :     result = std::numeric_limits&lt;double&gt;::quiet_NaN();</span></a>
+<a name="26"><span class="lineNum">      26 </span><span class="lineCov">          7 :   } catch (const std::overflow_error&amp; of_error) {</span></a>
+<a name="27"><span class="lineNum">      27 </span><span class="lineNoCov">          0 :     std::cerr &lt;&lt; of_error.what() &lt;&lt; std::endl;</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineNoCov">          0 :     result = std::numeric_limits&lt;double&gt;::quiet_NaN();</span></a>
+<a name="29"><span class="lineNum">      29 </span><span class="lineNoCov">          0 :   }</span></a>
+<a name="30"><span class="lineNum">      30 </span><span class="lineCov">         20 :   return result;</span></a>
+<a name="31"><span class="lineNum">      31 </span>            : }</a>
+<a name="32"><span class="lineNum">      32 </span>            : </a>
+<a name="33"><span class="lineNum">      33 </span><span class="lineCov">         20 : std::stack&lt;Lexem&gt; Calculator::Parcing(const std::string&amp; input) {</span></a>
+<a name="34"><span class="lineNum">      34 </span><span class="lineCov">         20 :   if (input.length() &gt; MAX_SIZE) {</span></a>
+<a name="35"><span class="lineNum">      35 </span><span class="lineNoCov">          0 :     throw std::overflow_error(&quot;The input is longer than 256 symbols.&quot;);</span></a>
+<a name="36"><span class="lineNum">      36 </span>            :   }</a>
+<a name="37"><span class="lineNum">      37 </span><span class="lineCov">         20 :   std::string noSpacesInput = RemoveSpaces(input);</span></a>
+<a name="38"><span class="lineNum">      38 </span><span class="lineCov">         20 :   std::stack&lt;Lexem&gt; notation;</span></a>
+<a name="39"><span class="lineNum">      39 </span><span class="lineCov">         20 :   std::stack&lt;Lexem&gt; operators;</span></a>
+<a name="40"><span class="lineNum">      40 </span><span class="lineCov">         20 :   std::string::const_iterator beg = noSpacesInput.begin();</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">         20 :   for (std::string::const_iterator symbolPos = noSpacesInput.begin();</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">        143 :        symbolPos &lt; noSpacesInput.end();) {</span></a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">        123 :     if (IsOperator(beg, symbolPos)) {</span></a>
+<a name="44"><span class="lineNum">      44 </span><span class="lineCov">         68 :       std::string operation = {*symbolPos};</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">         68 :       ParticleAllocation(operation, notation, operators);</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">         68 :       ++symbolPos;</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">        123 :     } else if (*symbolPos == '-') {</span></a>
+<a name="48"><span class="lineNum">      48 </span><span class="lineCov">          3 :       ParticleAllocation(&quot;~&quot;, notation, operators);</span></a>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">          3 :       ++symbolPos;</span></a>
+<a name="50"><span class="lineNum">      50 </span><span class="lineCov">         52 :     } else if (*symbolPos == '+') {</span></a>
+<a name="51"><span class="lineNum">      51 </span><span class="lineCov">          2 :       ParticleAllocation(&quot;&amp;&quot;, notation, operators);</span></a>
+<a name="52"><span class="lineNum">      52 </span><span class="lineCov">          2 :       ++symbolPos;</span></a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">         50 :     } else if (std::isdigit(*symbolPos)) {</span></a>
+<a name="54"><span class="lineNum">      54 </span><span class="lineCov">         29 :       NumberAllocation(symbolPos, notation, operators);</span></a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">         21 :     } else if (*symbolPos == ' ') {</span></a>
+<a name="56"><span class="lineNum">      56 </span><span class="lineNoCov">          0 :       ++symbolPos;</span></a>
+<a name="57"><span class="lineNum">      57 </span>            :     } else {</a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">         42 :       std::string operation = {&quot;&quot;};</span></a>
+<a name="59"><span class="lineNum">      59 </span>            :       do {</a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">         69 :         operation.append({*symbolPos});</span></a>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">         69 :         ++symbolPos;</span></a>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">         69 :       } while (IsLetterNotX(symbolPos));</span></a>
+<a name="63"><span class="lineNum">      63 </span><span class="lineCov">         21 :       ParticleAllocation(operation, notation, operators);</span></a>
+<a name="64"><span class="lineNum">      64 </span><span class="lineCov">         21 :     }</span></a>
+<a name="65"><span class="lineNum">      65 </span>            :   }</a>
+<a name="66"><span class="lineNum">      66 </span><span class="lineCov">         20 :   OperatorsToNotation(notation, operators);</span></a>
+<a name="67"><span class="lineNum">      67 </span><span class="lineCov">         40 :   return notation;</span></a>
+<a name="68"><span class="lineNum">      68 </span><span class="lineCov">         20 : }</span></a>
+<a name="69"><span class="lineNum">      69 </span>            : </a>
+<a name="70"><span class="lineNum">      70 </span><span class="lineCov">        102 : void Calculator::ParticleAllocation(std::string lexem,</span></a>
+<a name="71"><span class="lineNum">      71 </span>            :                                     std::stack&lt;Lexem&gt;&amp; notation,</a>
+<a name="72"><span class="lineNum">      72 </span>            :                                     std::stack&lt;Lexem&gt;&amp; operators) {</a>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">        102 :   if (lexem == &quot;x&quot; || lexem == &quot;X&quot;) {</span></a>
+<a name="74"><span class="lineNum">      74 </span><span class="lineCov">         17 :     notation.push({lexem, OPERATOR});</span></a>
+<a name="75"><span class="lineNum">      75 </span><span class="lineCov">         85 :   } else if (lexem == &quot;)&quot;) {</span></a>
+<a name="76"><span class="lineNum">      76 </span><span class="lineCov">         10 :     ClosingBracket(notation, operators);</span></a>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">        110 :   } else if (operators.size() == 0 || lexem == &quot;(&quot; ||</span></a>
+<a name="78"><span class="lineNum">      78 </span><span class="lineCov">        110 :              OperatorsPriority(lexem, operators.top()) == 1) {</span></a>
+<a name="79"><span class="lineNum">      79 </span><span class="lineCov">         65 :     operators.push({lexem, OPERATOR});</span></a>
+<a name="80"><span class="lineNum">      80 </span>            :   } else {</a>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         10 :     LowPriority(lexem, notation, operators);</span></a>
+<a name="82"><span class="lineNum">      82 </span>            :   }</a>
+<a name="83"><span class="lineNum">      83 </span><span class="lineCov">        102 : }</span></a>
+<a name="84"><span class="lineNum">      84 </span>            : </a>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         51 : int Calculator::OperatorsPriority(std::string input, const Lexem&amp; onStack) {</span></a>
+<a name="86"><span class="lineNum">      86 </span><span class="lineCov">         51 :   int pr = -1;</span></a>
+<a name="87"><span class="lineNum">      87 </span><span class="lineCov">         51 :   if (prioritization.find(input)-&gt;second &gt; onStack.GetPriority()) {</span></a>
+<a name="88"><span class="lineNum">      88 </span><span class="lineCov">         29 :     pr = 1;</span></a>
+<a name="89"><span class="lineNum">      89 </span>            :   }</a>
+<a name="90"><span class="lineNum">      90 </span><span class="lineCov">         51 :   return pr;</span></a>
+<a name="91"><span class="lineNum">      91 </span>            : }</a>
+<a name="92"><span class="lineNum">      92 </span>            : </a>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         10 : void Calculator::ClosingBracket(std::stack&lt;Lexem&gt;&amp; notation,</span></a>
+<a name="94"><span class="lineNum">      94 </span>            :                                 std::stack&lt;Lexem&gt;&amp; operators) {</a>
+<a name="95"><span class="lineNum">      95 </span><span class="lineCov">         22 :   while (operators.size() &gt; 0 &amp;&amp; operators.top().GetValue() != &quot;(&quot;) {</span></a>
+<a name="96"><span class="lineNum">      96 </span><span class="lineCov">         12 :     notation.push(operators.top());</span></a>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         12 :     operators.pop();</span></a>
+<a name="98"><span class="lineNum">      98 </span>            :   }</a>
+<a name="99"><span class="lineNum">      99 </span><span class="lineCov">         10 :   operators.pop();</span></a>
+<a name="100"><span class="lineNum">     100 </span><span class="lineCov">         10 : }</span></a>
+<a name="101"><span class="lineNum">     101 </span>            : </a>
+<a name="102"><span class="lineNum">     102 </span><span class="lineCov">         10 : void Calculator::LowPriority(std::string lexem, std::stack&lt;Lexem&gt;&amp; notation,</span></a>
+<a name="103"><span class="lineNum">     103 </span>            :                              std::stack&lt;Lexem&gt;&amp; operators) {</a>
+<a name="104"><span class="lineNum">     104 </span><span class="lineCov">         38 :   while (operators.size() &gt; 0 &amp;&amp;</span></a>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         38 :          OperatorsPriority(lexem, operators.top()) == -1) {</span></a>
+<a name="106"><span class="lineNum">     106 </span><span class="lineCov">         12 :     notation.push(operators.top());</span></a>
+<a name="107"><span class="lineNum">     107 </span><span class="lineCov">         12 :     operators.pop();</span></a>
+<a name="108"><span class="lineNum">     108 </span>            :   }</a>
+<a name="109"><span class="lineNum">     109 </span><span class="lineCov">         10 :   operators.push({lexem, OPERATOR});</span></a>
+<a name="110"><span class="lineNum">     110 </span><span class="lineCov">         10 : }</span></a>
+<a name="111"><span class="lineNum">     111 </span>            : </a>
+<a name="112"><span class="lineNum">     112 </span><span class="lineCov">         20 : void Calculator::OperatorsToNotation(std::stack&lt;Lexem&gt;&amp; notation,</span></a>
+<a name="113"><span class="lineNum">     113 </span>            :                                      std::stack&lt;Lexem&gt;&amp; operators) {</a>
+<a name="114"><span class="lineNum">     114 </span><span class="lineCov">         61 :   while (operators.size() &gt; 0) {</span></a>
+<a name="115"><span class="lineNum">     115 </span><span class="lineCov">         41 :     if (operators.top().GetValue() == &quot;(&quot;) {</span></a>
+<a name="116"><span class="lineNum">     116 </span><span class="lineCov">         11 :       operators.pop();</span></a>
+<a name="117"><span class="lineNum">     117 </span>            :     } else {</a>
+<a name="118"><span class="lineNum">     118 </span><span class="lineCov">         30 :       notation.push(operators.top());</span></a>
+<a name="119"><span class="lineNum">     119 </span><span class="lineCov">         30 :       operators.pop();</span></a>
+<a name="120"><span class="lineNum">     120 </span>            :     }</a>
+<a name="121"><span class="lineNum">     121 </span>            :   }</a>
+<a name="122"><span class="lineNum">     122 </span><span class="lineCov">         20 : }</span></a>
+<a name="123"><span class="lineNum">     123 </span>            : </a>
+<a name="124"><span class="lineNum">     124 </span><span class="lineCov">        123 : bool Calculator::IsOperator(const std::string::const_iterator&amp; beg,</span></a>
+<a name="125"><span class="lineNum">     125 </span>            :                             const std::string::const_iterator&amp; c) {</a>
+<a name="126"><span class="lineNum">     126 </span>            :   bool symbolIsMinus =</a>
+<a name="127"><span class="lineNum">     127 </span><span class="lineCov">        127 :       *c == '-' &amp;&amp; c != beg &amp;&amp;</span></a>
+<a name="128"><span class="lineNum">     128 </span><span class="lineCov">          4 :       (std::isdigit(*(c - 1)) || *(c - 1) == ')' || IsX(*(c - 1)));</span></a>
+<a name="129"><span class="lineNum">     129 </span>            :   bool symbolIsPlus =</a>
+<a name="130"><span class="lineNum">     130 </span><span class="lineCov">        130 :       *c == '+' &amp;&amp; c != beg &amp;&amp;</span></a>
+<a name="131"><span class="lineNum">     131 </span><span class="lineCov">          7 :       (std::isdigit(*(c - 1)) || *(c - 1) == ')' || IsX(*(c - 1)));</span></a>
+<a name="132"><span class="lineNum">     132 </span><span class="lineCov">        233 :   bool symbolIsOperator = IsX(*c) || *c == '*' || *c == '/' || *c == '(' ||</span></a>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">        233 :                           *c == ')' || *c == '^' || symbolIsMinus ||</span></a>
+<a name="134"><span class="lineNum">     134 </span><span class="lineCov">        123 :                           symbolIsPlus;</span></a>
+<a name="135"><span class="lineNum">     135 </span><span class="lineCov">        123 :   return symbolIsOperator;</span></a>
+<a name="136"><span class="lineNum">     136 </span>            : }</a>
+<a name="137"><span class="lineNum">     137 </span>            : </a>
+<a name="138"><span class="lineNum">     138 </span><span class="lineCov">         69 : bool Calculator::IsLetterNotX(const std::string::const_iterator&amp; c) {</span></a>
+<a name="139"><span class="lineNum">     139 </span><span class="lineCov">         69 :   int not_x = *c != 'x' &amp;&amp; *c != 'X';</span></a>
+<a name="140"><span class="lineNum">     140 </span><span class="lineCov">         69 :   return std::isalpha(*c) &amp;&amp; not_x;</span></a>
+<a name="141"><span class="lineNum">     141 </span>            : }</a>
+<a name="142"><span class="lineNum">     142 </span>            : </a>
+<a name="143"><span class="lineNum">     143 </span><span class="lineCov">        129 : bool Calculator::IsX(char c) { return c == 'x' || c == 'X'; }</span></a>
+<a name="144"><span class="lineNum">     144 </span>            : </a>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         29 : void Calculator::NumberAllocation(std::string::const_iterator&amp; input,</span></a>
+<a name="146"><span class="lineNum">     146 </span>            :                                   std::stack&lt;Lexem&gt;&amp; notation,</a>
+<a name="147"><span class="lineNum">     147 </span>            :                                   std::stack&lt;Lexem&gt;&amp; operators) {</a>
+<a name="148"><span class="lineNum">     148 </span><span class="lineCov">         29 :   std::string number = {&quot;&quot;};</span></a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">         29 :   number.append({*input});</span></a>
+<a name="150"><span class="lineNum">     150 </span><span class="lineCov">         29 :   input++;</span></a>
+<a name="151"><span class="lineNum">     151 </span><span class="lineCov">         41 :   while (std::isdigit(*input) || *input == '.' || *input == ',') {</span></a>
+<a name="152"><span class="lineNum">     152 </span><span class="lineCov">         12 :     number.append({*input});</span></a>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">         12 :     input++;</span></a>
+<a name="154"><span class="lineNum">     154 </span>            :   }</a>
+<a name="155"><span class="lineNum">     155 </span><span class="lineCov">         29 :   notation.push({number, NUMBER});</span></a>
+<a name="156"><span class="lineNum">     156 </span><span class="lineCov">         29 :   if (*input == 'X' || *input == 'x') {</span></a>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">          4 :     ParticleAllocation(&quot;#&quot;, notation, operators);</span></a>
+<a name="158"><span class="lineNum">     158 </span><span class="lineCov">          4 :     ParticleAllocation(&quot;x&quot;, notation, operators);</span></a>
+<a name="159"><span class="lineNum">     159 </span><span class="lineCov">          4 :     input++;</span></a>
+<a name="160"><span class="lineNum">     160 </span>            :   }</a>
+<a name="161"><span class="lineNum">     161 </span><span class="lineCov">         29 : }</span></a>
+<a name="162"><span class="lineNum">     162 </span>            : </a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">         20 : std::stack&lt;Lexem&gt; Calculator::ReplaceX(const std::stack&lt;Lexem&gt;&amp; notation,</span></a>
+<a name="164"><span class="lineNum">     164 </span>            :                                        double xNumber) {</a>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">         20 :   std::stack&lt;Lexem&gt; revStack = notation;</span></a>
+<a name="166"><span class="lineNum">     166 </span><span class="lineCov">         20 :   std::stack&lt;Lexem&gt; resultExp;</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineCov">        120 :   for (size_t i = revStack.size(); i &gt; 0; --i) {</span></a>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">        100 :     if (revStack.top().GetValue() == &quot;x&quot;) {</span></a>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">         17 :       char buffer[MAX_SIZE];</span></a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">         17 :       sprintf(buffer, &quot;%lf&quot;, xNumber);</span></a>
+<a name="171"><span class="lineNum">     171 </span><span class="lineCov">         17 :       resultExp.push({buffer, NUMBER});</span></a>
+<a name="172"><span class="lineNum">     172 </span><span class="lineCov">         17 :     } else {</span></a>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">         83 :       resultExp.push(revStack.top());</span></a>
+<a name="174"><span class="lineNum">     174 </span>            :     }</a>
+<a name="175"><span class="lineNum">     175 </span><span class="lineCov">        100 :     revStack.pop();</span></a>
+<a name="176"><span class="lineNum">     176 </span>            :   }</a>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">         40 :   return resultExp;</span></a>
+<a name="178"><span class="lineNum">     178 </span><span class="lineCov">         20 : }</span></a>
+<a name="179"><span class="lineNum">     179 </span>            : </a>
+<a name="180"><span class="lineNum">     180 </span><span class="lineCov">         20 : double Calculator::Calculate(std::stack&lt;Lexem&gt; notation) {</span></a>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">         20 :   std::stack&lt;double&gt; numbers;</span></a>
+<a name="182"><span class="lineNum">     182 </span><span class="lineCov">         20 :   double result = 0;</span></a>
+<a name="183"><span class="lineNum">     183 </span><span class="lineCov">         20 :   if (!notation.empty()) {</span></a>
+<a name="184"><span class="lineNum">     184 </span><span class="lineCov">        111 :     for (int i = notation.size(); i &gt; 0; i--) {</span></a>
+<a name="185"><span class="lineNum">     185 </span><span class="lineCov">         99 :       if (notation.top().GetType() == NUMBER) {</span></a>
+<a name="186"><span class="lineNum">     186 </span><span class="lineCov">         46 :         numbers.push(std::stod(notation.top().GetValue()));</span></a>
+<a name="187"><span class="lineNum">     187 </span>            :       } else {</a>
+<a name="188"><span class="lineNum">     188 </span><span class="lineCov">         60 :         RunOperation(notation.top().GetValue(), numbers);</span></a>
+<a name="189"><span class="lineNum">     189 </span>            :       }</a>
+<a name="190"><span class="lineNum">     190 </span><span class="lineCov">         92 :       notation.pop();</span></a>
+<a name="191"><span class="lineNum">     191 </span>            :     }</a>
+<a name="192"><span class="lineNum">     192 </span>            :   } else {</a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          1 :     throw std::underflow_error(&quot;The expression is empty.&quot;);</span></a>
+<a name="194"><span class="lineNum">     194 </span>            :   }</a>
+<a name="195"><span class="lineNum">     195 </span><span class="lineCov">         12 :   if (!std::isnan(result)) {</span></a>
+<a name="196"><span class="lineNum">     196 </span><span class="lineCov">         12 :     result = numbers.top();</span></a>
+<a name="197"><span class="lineNum">     197 </span><span class="lineCov">         12 :     numbers.pop();</span></a>
+<a name="198"><span class="lineNum">     198 </span>            :   }</a>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">         12 :   return result;</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineCov">         20 : }</span></a>
+<a name="201"><span class="lineNum">     201 </span>            : </a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">         53 : void Calculator::RunOperation(const std::string operation,</span></a>
+<a name="203"><span class="lineNum">     203 </span>            :                               std::stack&lt;double&gt;&amp; numbers) {</a>
+<a name="204"><span class="lineNum">     204 </span><span class="lineCov">         53 :   if (numbers.empty()) {</span></a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">          1 :     throw std::logic_error(&quot;No arguments for the operation.&quot;);</span></a>
+<a name="206"><span class="lineNum">     206 </span>            :   }</a>
+<a name="207"><span class="lineNum">     207 </span><span class="lineCov">         52 :   double a = numbers.top();</span></a>
+<a name="208"><span class="lineNum">     208 </span><span class="lineCov">         52 :   numbers.pop();</span></a>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">         52 :   double result = 0;</span></a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">         52 :   if (operation == &quot;~&quot;) {</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          3 :     result -= a;</span></a>
+<a name="212"><span class="lineNum">     212 </span><span class="lineCov">         49 :   } else if (operation == &quot;&amp;&quot;) {</span></a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">          1 :     result = a;</span></a>
+<a name="214"><span class="lineNum">     214 </span><span class="lineCov">         48 :   } else if (operation == &quot;sin&quot;) {</span></a>
+<a name="215"><span class="lineNum">     215 </span><span class="lineCov">          3 :     result = sin(a);</span></a>
+<a name="216"><span class="lineNum">     216 </span><span class="lineCov">         45 :   } else if (operation == &quot;cos&quot;) {</span></a>
+<a name="217"><span class="lineNum">     217 </span><span class="lineCov">          3 :     result = cos(a);</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">         42 :   } else if (operation == &quot;tan&quot;) {</span></a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineCov">          2 :     result = tan(a);</span></a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">         40 :   } else if (operation == &quot;asin&quot;) {</span></a>
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">          1 :     result = asin(a);</span></a>
+<a name="222"><span class="lineNum">     222 </span><span class="lineCov">         39 :   } else if (operation == &quot;acos&quot;) {</span></a>
+<a name="223"><span class="lineNum">     223 </span><span class="lineCov">          1 :     result = acos(a);</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">         38 :   } else if (operation == &quot;atan&quot;) {</span></a>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">          1 :     result = atan(a);</span></a>
+<a name="226"><span class="lineNum">     226 </span><span class="lineCov">         37 :   } else if (operation == &quot;ctg&quot;) {</span></a>
+<a name="227"><span class="lineNum">     227 </span><span class="lineCov">          1 :     result = cos(a) / sin(a);</span></a>
+<a name="228"><span class="lineNum">     228 </span><span class="lineCov">         36 :   } else if (operation == &quot;sqrt&quot;) {</span></a>
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">          2 :     if (a &lt; 0) {</span></a>
+<a name="230"><span class="lineNum">     230 </span><span class="lineCov">          1 :       throw std::logic_error(&quot;Square root from negfative number.&quot;);</span></a>
+<a name="231"><span class="lineNum">     231 </span>            :     } else {</a>
+<a name="232"><span class="lineNum">     232 </span><span class="lineCov">          1 :       result = sqrt(a);</span></a>
+<a name="233"><span class="lineNum">     233 </span>            :     }</a>
+<a name="234"><span class="lineNum">     234 </span><span class="lineCov">         34 :   } else if (operation == &quot;ln&quot;) {</span></a>
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          1 :     result = log(a);</span></a>
+<a name="236"><span class="lineNum">     236 </span><span class="lineCov">         33 :   } else if (operation == &quot;log&quot;) {</span></a>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">          1 :     result = log10(a);</span></a>
+<a name="238"><span class="lineNum">     238 </span><span class="lineCov">         32 :   } else if (numbers.empty()) {</span></a>
+<a name="239"><span class="lineNum">     239 </span><span class="lineCov">          4 :     throw std::logic_error(&quot;No arguments for the operation.&quot;);</span></a>
+<a name="240"><span class="lineNum">     240 </span><span class="lineCov">         28 :   } else if (operation == &quot;-&quot;) {</span></a>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">          1 :     double b = numbers.top();</span></a>
+<a name="242"><span class="lineNum">     242 </span><span class="lineCov">          1 :     numbers.pop();</span></a>
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">          1 :     result = b - a;</span></a>
+<a name="244"><span class="lineNum">     244 </span><span class="lineCov">         27 :   } else if (operation == &quot;*&quot; || operation == &quot;#&quot;) {</span></a>
+<a name="245"><span class="lineNum">     245 </span><span class="lineCov">         12 :     double b = numbers.top();</span></a>
+<a name="246"><span class="lineNum">     246 </span><span class="lineCov">         12 :     numbers.pop();</span></a>
+<a name="247"><span class="lineNum">     247 </span><span class="lineCov">         12 :     result = b * a;</span></a>
+<a name="248"><span class="lineNum">     248 </span><span class="lineCov">         15 :   } else if (operation == &quot;/&quot;) {</span></a>
+<a name="249"><span class="lineNum">     249 </span><span class="lineCov">          2 :     if (a == 0) {</span></a>
+<a name="250"><span class="lineNum">     250 </span><span class="lineCov">          1 :       result = 0;</span></a>
+<a name="251"><span class="lineNum">     251 </span><span class="lineCov">          1 :       throw std::logic_error(&quot;Division by 0.&quot;);</span></a>
+<a name="252"><span class="lineNum">     252 </span>            :     }</a>
+<a name="253"><span class="lineNum">     253 </span><span class="lineCov">          1 :     double b = numbers.top();</span></a>
+<a name="254"><span class="lineNum">     254 </span><span class="lineCov">          1 :     numbers.pop();</span></a>
+<a name="255"><span class="lineNum">     255 </span><span class="lineCov">          1 :     result = b / a;</span></a>
+<a name="256"><span class="lineNum">     256 </span><span class="lineCov">         13 :   } else if (operation == &quot;mod&quot;) {</span></a>
+<a name="257"><span class="lineNum">     257 </span><span class="lineCov">          1 :     if (a == 0) {</span></a>
+<a name="258"><span class="lineNum">     258 </span><span class="lineNoCov">          0 :       result = 0;</span></a>
+<a name="259"><span class="lineNum">     259 </span><span class="lineNoCov">          0 :       throw std::logic_error(&quot;Division by 0.&quot;);</span></a>
+<a name="260"><span class="lineNum">     260 </span>            :     } else {</a>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          1 :       double b = numbers.top();</span></a>
+<a name="262"><span class="lineNum">     262 </span><span class="lineCov">          1 :       numbers.pop();</span></a>
+<a name="263"><span class="lineNum">     263 </span><span class="lineCov">          1 :       result = fmod(b, a);</span></a>
+<a name="264"><span class="lineNum">     264 </span>            :     }</a>
+<a name="265"><span class="lineNum">     265 </span><span class="lineCov">         12 :   } else if (operation == &quot;+&quot;) {</span></a>
+<a name="266"><span class="lineNum">     266 </span><span class="lineCov">          5 :     double b = numbers.top();</span></a>
+<a name="267"><span class="lineNum">     267 </span><span class="lineCov">          5 :     numbers.pop();</span></a>
+<a name="268"><span class="lineNum">     268 </span><span class="lineCov">          5 :     result = b + a;</span></a>
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">          7 :   } else if (operation == &quot;^&quot;) {</span></a>
+<a name="270"><span class="lineNum">     270 </span><span class="lineCov">          7 :     double b = numbers.top();</span></a>
+<a name="271"><span class="lineNum">     271 </span><span class="lineCov">          7 :     numbers.pop();</span></a>
+<a name="272"><span class="lineNum">     272 </span><span class="lineCov">          7 :     result = pow(b, a);</span></a>
+<a name="273"><span class="lineNum">     273 </span>            :   } else {</a>
+<a name="274"><span class="lineNum">     274 </span><span class="lineNoCov">          0 :     throw std::logic_error(&quot;Incorrect operator.&quot;);</span></a>
+<a name="275"><span class="lineNum">     275 </span>            :   }</a>
+<a name="276"><span class="lineNum">     276 </span><span class="lineCov">         46 :   numbers.push(result);</span></a>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">         46 : }</span></a>
+<a name="278"><span class="lineNum">     278 </span>            : </a>
+<a name="279"><span class="lineNum">     279 </span><span class="lineCov">          2 : double Calculator::CAnnuityPayment(double s, double p, double n) {</span></a>
+<a name="280"><span class="lineNum">     280 </span><span class="lineCov">          2 :   p = p / 12;</span></a>
+<a name="281"><span class="lineNum">     281 </span>            :   double monthly_payment;</a>
+<a name="282"><span class="lineNum">     282 </span><span class="lineCov">          2 :   if (p == 0) {</span></a>
+<a name="283"><span class="lineNum">     283 </span><span class="lineCov">          1 :     monthly_payment = s / n;</span></a>
+<a name="284"><span class="lineNum">     284 </span>            :   } else {</a>
+<a name="285"><span class="lineNum">     285 </span><span class="lineCov">          1 :     monthly_payment = s * p * pow((1 + p), n) / (pow((1 + p), n) - 1);</span></a>
+<a name="286"><span class="lineNum">     286 </span>            :   }</a>
+<a name="287"><span class="lineNum">     287 </span><span class="lineCov">          2 :   return monthly_payment;</span></a>
+<a name="288"><span class="lineNum">     288 </span>            : }</a>
+<a name="289"><span class="lineNum">     289 </span>            : </a>
+<a name="290"><span class="lineNum">     290 </span><span class="lineCov">          1 : double Calculator::CInterestSum(double s, double p) {</span></a>
+<a name="291"><span class="lineNum">     291 </span><span class="lineCov">          1 :   p = p / 12;</span></a>
+<a name="292"><span class="lineNum">     292 </span><span class="lineCov">          1 :   double percents_sum = s * p;</span></a>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">          1 :   return percents_sum;</span></a>
+<a name="294"><span class="lineNum">     294 </span>            : }</a>
+<a name="295"><span class="lineNum">     295 </span>            : </a>
+<a name="296"><span class="lineNum">     296 </span><span class="lineCov">         20 : std::string Calculator::RemoveSpaces(std::string input) {</span></a>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">        210 :   for (size_t i = 0; i &lt; input.length(); i++) {</span></a>
+<a name="298"><span class="lineNum">     298 </span><span class="lineCov">        190 :     if (input[i] == ' ') {</span></a>
+<a name="299"><span class="lineNum">     299 </span><span class="lineCov">          3 :       input.erase(i, 1);</span></a>
+<a name="300"><span class="lineNum">     300 </span><span class="lineCov">          3 :       i--;</span></a>
+<a name="301"><span class="lineNum">     301 </span>            :     }</a>
+<a name="302"><span class="lineNum">     302 </span>            :   }</a>
+<a name="303"><span class="lineNum">     303 </span><span class="lineCov">         20 :   return input;</span></a>
+<a name="304"><span class="lineNum">     304 </span>            : }</a>
+<a name="305"><span class="lineNum">     305 </span>            : </a>
+<a name="306"><span class="lineNum">     306 </span>            : }  // namespace s21</a>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.14</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
